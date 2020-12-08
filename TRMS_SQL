@@ -1,0 +1,409 @@
+/***********************
+*DROP Database Tables*
+***********************/
+Drop Table "login";
+Drop Table "reimbursement";
+Drop Table "reimbursement_status";
+Drop Table "upload_file";
+Drop Table "event";
+Drop table "grade";
+Drop Table "event_type";
+Drop Table "grading_format_company";
+Drop Table "employee";
+
+/***************
+*DROP Sequences*
+***************/
+Drop sequence seqPK_employee;
+Drop sequence seqPK_reimbursement;
+Drop sequence seqPK_event;
+
+/*****************************
+*Create Primary Key Sequences*
+*****************************/
+CREATE SEQUENCE seqPK_employee;
+CREATE SEQUENCE seqPK_reimbursement;
+CREATE SEQUENCE seqPK_event;
+
+/***********************
+*Create Database Tables*
+***********************/
+CREATE TABLE "login" (
+    "employee_id" int4 not null,    
+    "username" varchar(100),
+    "password" varchar(100)
+);
+CREATE INDEX "PK.FK" ON  "login" ("employee_id");
+
+
+CREATE TABLE "employee" (
+	"employee_id" int default nextval ('seqPK_employee') not null,
+  	"title" varchar(50),
+  	"reports_to" int4,
+  	"first_name" varchar(40),
+  	"middle_name" varchar(40),
+  	"last_name" varchar(40),
+  	"date_birth" varchar(50),
+  	"phone_number" varchar(24),
+  	"email" varchar(60),
+  	"address" varchar(80),
+  	"city" varchar(50),
+  	"state" varchar(50),
+  	"country" varchar(50),
+  	"postal_code" varchar(10),
+  	PRIMARY KEY ("employee_id")
+);
+
+CREATE TABLE "reimbursement" (
+	"reimbursement_id" int default nextval ('seqPK_reimbursement') not null,
+	"employee_id" int4 not null,
+	"event_id" int4 not null,
+	"date_submition" date,
+	"employee_cancel" varchar(15),
+	"justification" varchar(280),
+	"amount_requested" numeric(6,2), -- original amount
+	"adjusted_amount" numeric(6,2), -- fixed amount
+	"dephead_approval_date" varchar(50),
+	"dirsup_approval_date" varchar(50),
+	"benco_approval_date" varchar(50),
+	"reimbursement_status_id" int4,
+	"notes" varchar(350),
+	"upload_file_id" int4,
+	PRIMARY KEY ("reimbursement_id")
+);
+
+
+CREATE TABLE "upload_file" (
+	"upload_file_id" serial,
+	"fileName" varchar(150),
+	"content" bytea,
+	PRIMARY KEY ("upload_file_id")
+);
+
+CREATE TABLE "reimbursement_status" -- Reference Table
+(
+	"reimbursement_status_id" int4 not null,
+	"status" varchar(250),
+	PRIMARY KEY ("reimbursement_status_id")
+);
+
+CREATE TABLE "event" (
+	"event_id" int default nextval ('seqPK_event') not null,
+	"event_type_id" int4 not null,
+	"name" varchar(80),
+	"description" varchar(350),
+	"start_date" varchar(50),
+	"end_date" varchar(50),
+	"location" varchar(100),
+	"grading_format_id" int4,
+	"employee_grade" varchar(30),
+	"grade_id" int4,
+	PRIMARY KEY ("event_id")
+);
+
+CREATE TABLE "event_type" --- Reference Table
+(
+	"event_type_id" int4 not null, 
+	"event_type_names" varchar(100),
+	"event_type_percentage" numeric(3,2),
+	PRIMARY KEY ("event_type_id")	
+);
+
+CREATE TABLE "grading_format_company" -- Reference TABLE
+(
+	"grading_format_id" int4 not null,
+	"grading_format" varchar(100), 
+	PRIMARY KEY ("grading_format_id")
+);
+
+CREATE TABLE "grade" -- Reference Table
+(
+	"grade_id" int4 not null, 
+	"grade_letter" varchar(3),
+	"min_percentage" numeric(6,2),
+	"max_percentage" numeric(6,2), 
+	"pass_fail" varchar(4),
+	"reference_grade" varchar(10),
+	PRIMARY KEY ("grade_id")
+);
+
+
+/****************************
+*Add Foriegn Key Constraints*
+****************************/
+ALTER TABLE reimbursement ADD CONSTRAINT FK_Employee_ID
+FOREIGN KEY (employee_id) REFERENCES employee (employee_id);
+
+ALTER TABLE reimbursement ADD CONSTRAINT FK_Event_ID
+FOREIGN KEY (event_id) REFERENCES "event" (event_id);
+
+ALTER TABLE reimbursement ADD CONSTRAINT FK_UploadFile_ID
+FOREIGN KEY (upload_file_id) REFERENCES upload_file (upload_file_id)
+on delete cascade;
+
+ALTER TABLE reimbursement ADD CONSTRAINT FK_ReimStatus_ID
+FOREIGN KEY (reimbursement_status_id) REFERENCES reimbursement_status (reimbursement_status_id);
+
+ALTER TABLE "event" ADD CONSTRAINT FK_EventType_ID
+FOREIGN KEY (event_type_id) REFERENCES event_type (event_type_id);
+
+ALTER TABLE "event" ADD CONSTRAINT FK_GradeFormat_ID
+FOREIGN KEY (grading_format_id) REFERENCES grading_format_company (grading_format_id);
+
+ALTER TABLE "event" ADD CONSTRAINT FK_Grad_ID
+FOREIGN KEY (grade_id) REFERENCES grade (grade_id);
+
+
+/*************************
+*Add Reference Table Data*
+*************************/
+
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (1, 'University Course', 0.80);
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (2, 'Seminar', 0.60);
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (3, 'Certification Preparation Classes', 0.75);
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (4, 'Certification Exam', 1.00);
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (5, 'Technical Training', 0.90);
+INSERT INTO event_type (event_type_id, event_type_names, event_type_percentage) VALUES (6, 'Other', 0.30);
+
+INSERT INTO grading_format_company (grading_format_id, grading_format) VALUES (1, 'Letter grading and variations');
+INSERT INTO grading_format_company (grading_format_id, grading_format) VALUES (2, 'Percentage Grading');
+INSERT INTO grading_format_company (grading_format_id, grading_format) VALUES (3, 'Pass/Fail');
+INSERT INTO grading_format_company (grading_format_id, grading_format) VALUES (4, 'Reference Grade');
+
+INSERT INTO grade (grade_id, grade_letter, min_percentage, max_percentage, pass_fail, reference_grade) VALUES (1,'A', 90, 100, 'Pass', 'Excellent');
+INSERT INTO grade (grade_id, grade_letter, min_percentage, max_percentage, pass_fail, reference_grade) VALUES (2,'B', 80,  89, 'Pass', 'Good');
+INSERT INTO grade (grade_id, grade_letter, min_percentage, max_percentage, pass_fail, reference_grade) VALUES (3,'C', 70,  79, 'Pass', 'Average');
+INSERT INTO grade (grade_id, grade_letter, min_percentage, max_percentage, pass_fail, reference_grade) VALUES (4,'D', 60,  69, 'Fail', 'Poor, pass');
+INSERT INTO grade (grade_id, grade_letter, min_percentage, max_percentage, pass_fail, reference_grade) VALUES (5,'F',  0,  59, 'Fail', 'Failure');
+
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (1,'Pending');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (2,'Grade Pending');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (3,'Approval Pending');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (4,'Awarded');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (5,'Cancelled');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (6,'Urgent');
+INSERT INTO reimbursement_status (reimbursement_status_id, status) VALUES (7,'Denied');
+
+
+/*****************************
+*Add Dummy Information Tables*
+*****************************/
+insert into login (employee_id, username, password) values (100, 'yara', 'password');
+insert into login (employee_id, username, password) values (101, 'emmanuel', 'password');
+insert into login (employee_id, username, password) values (102, 'hannah', 'password');
+insert into login (employee_id, username, password) values (103, 'brett', 'password');
+insert into login (employee_id, username, password) values (104, 'luisantonio', 'password');
+insert into login (employee_id, username, password) values (105, 'ericka', 'password');
+insert into login (employee_id, username, password) values (200, 'directo1', 'password');
+insert into login (employee_id, username, password) values (201, 'directo2', 'password');
+insert into login (employee_id, username, password) values (300, 'dephead1', 'pass10');
+insert into login (employee_id, username, password) values (301, 'dephead2', 'pass20');
+insert into login (employee_id, username, password) values (400, 'benco1', 'pass1');
+insert into login (employee_id, username, password) values (401, 'benco2', 'pass2');
+
+--Regular employees (8 employees at level 100)--
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (100,'Regular', 200, 'Yarashlee', 'M', 'Cruz', '1992-05-01', '852-963-1478', 'yaracruz@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (101,'Regular', 200, 'Emmanuel', 'F', 'Castillo', '1972-05-01', '852-963-1478', 'emmafca@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (102,'Regular', 201, 'Hannah', 'I', 'Hasbro', '1992-05-01', '852-963-1478', 'hannahihas@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (103,'Regular', 201, 'Brett', 'R', 'Rodriguez', '1974-08-01', '852-963-1478', 'brettrr@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (104,'Regular', 202, 'Luis', 'A', 'Rubio', '1972-05-01', '852-963-1478', 'luisfilo@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (105,'Regular', 202, 'Ericka', 'A', 'Simpson', '1982-05-01', '852-963-1478', 'erickaasim@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (106,'Regular', 203, 'Prativa', 'M', 'Cyrus', '1992-05-01', '852-963-1478', 'prativamcy@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (107,'Regular', 203, 'Nelly', 'G', 'Furtado', '1990-05-01', '852-963-1478', 'nfurtado@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+
+--Direct Supervisor (4 employees at leavel 200)--
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (200,'Direct Supervisor', 300, 'Christian', 'K', 'McLean', '1992-05-01', '852-963-1478', 'cmaclan@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (201,'Direct Supervisor', 300, 'Kiara', 'G', 'Watson', '1992-05-01', '852-963-1478', 'megsacg@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (202,'Direct Supervisor', 301, 'Gerald', 'D', 'Fitzgerald', '1992-05-01', '852-963-1478', 'gftadf@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (203,'Direct Supervisor', 301, 'Minnie', 'K', 'Hartxz', '1992-05-01', '852-963-1478', 'hartzmin@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+
+--Department Head (2 employees at leavel 300)--
+insert into employee (employee_id ,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (300,'Head Departement', null, 'Jeffrey', 'E',  'Nickson', '1955-01-19', '959-585-5236', 'jeffreenickson@coorp.com', '157 Street Cliffort', 'New York',
+'New York', 'US', '07087');
+insert into employee (employee_id ,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (301,'Head Departement', null, 'Jack', 'W',  'Daniels', '1955-01-19', '959-585-5236', 'jjdann@coorp.com', '157 Street Cliffort', 'New York',
+'New York', 'US', '07087');
+
+--BenCo (2 employees at leavel 400)--
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (400,'Benco', null, 'Brandon', 'L', 'Gomez', '1992-05-01', '852-963-1478', 'Bencouuuatu@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+insert into employee (employee_id,title, reports_to, first_name, middle_name, last_name, date_birth,
+phone_number, email, address, city, state, country, postal_code)
+values (401,'Benco', null, 'Ashley', 'F', 'sanders', '1992-05-01', '852-963-1478', 'sandershsa@coorp.com', '187 Magnolia Street', 'New York',
+'New York', 'US', '07085');
+
+/*** Event ***/
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- PASS | Approved
+values (1, 'Masters Data Science', '4 credits for a Data Science course for Masters Degree', '2020-05-01','2020-09-01','Texas University', 1, 'A', 1);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Pending
+values (2, 'Microsoft Azure', 'Seminar About Microsoft Azure Basics', '2021-01-20','2021-01-20','Las Vegas', 4, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) --  Pending
+values (3, 'Ethical Hacker', 'Classes for preparation of certification', '2020-11-30','2021-12-30','Standford University', 2, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) --  Pending 
+values (4, 'CompTIA Security+', 'Security Certification Exam', '2021-02-02','2021-03-30','Massachusetts Institute of Technology',3, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Fail | Declined 
+values (5, 'Paython Course', 'Online Course Basics of Paython', '2020-03-05','2020-06-29','Texas University', 1, 'F', 5);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- PASS | Approved
+values (6, 'Data Science', '4 credits for a Data Science course for Data Science', '2020-11-01','2020-11-28','Texas University', 1, 'A', 1);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Passed | Approved
+values (2, 'C# Semminar', 'C# Learning  New Syntax', '2020-11-20','2020-11-20', 'TexasUniversity', 4, 'Present at seminar', 1);
+
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Pending
+values (3, 'Google Certified Professional Cloud Architect', 'GCA Certification Classes Basic', '2020-12-28','2021-03-30','Massachusetts Institute of Technology', 2, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Waiting for grade
+values (4, 'AWS Certified Developer – Associate', 'AWS Certification Examn', '2020-11-01','2020-11-30','Massachusetts Institute of Technology', 3, 'Pass 69%', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- pending
+values (4, 'Certified Information Systems Security Professional', 'ISS Certification Examn', '2020-12-20','2021-03-29','Massachusetts Institute of Technology', 3, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Declined
+values (5, 'Web Development', 'Course for Web Development', '2020-02-15','2020-03-14','Massachusetts Institute of Technology', 4, 'Fail Course 44%', 4);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- urgent
+values (1, 'Programming Basics', '4 credits Learning Basic Programming (VS)', '2020-12-01','2020-12-29','Miami University', 2, '', null);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- cancel
+values (1, 'Masters Data Science', '4 credits for a Data Science course for Masters Degree', '2020-02-05','2020-05-08','Texas University', 1, 'A', 1);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- Pass
+values (1, 'Masters Data Science', '4 credits for a Data Science course for Masters Degree', '2020-05-01','2020-09-01','Massachusetts Institute of Technology', 1, 'A', 1);
+
+insert into event (event_type_id, name, description, start_date,end_date, location, grading_format_id, employee_grade, grade_id) -- approval pending
+values (1, 'Masters Data Science', '4 credits for a Data Science course for Masters Degree', '2020-10-12','2020-11-25','Standford University', 1, 'A', 1);
+
+
+/*** Reimbursement ***/
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (100, 1, '2020-04-15', 'false', 'Implement data science on workplace while working on new technologies', 550.00, 440.00,
+'2020-09-16', '2020-09-25', '2020-09-28', 4, 'Presentation was uploaded late', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (104, 2, '2020-11-30', 'false', 'Learn how to use Azure technologies to implement', 100.00, 60.00, '', '', '', 1, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (100, 3, '2020-11-02', 'false', 'Protect the technologies and information form hackers', 350.00, 262.50, '', '', '', 2, 'Waiting for grades', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (101, 4, '2020-12-05', 'false', 'Get certified on Security for implementation on work enviorment', 775.00, 775.00, '', '', '', 1, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (203, 5, '2020-02-25', 'false', 'Use paython to create applications', 200.00, 180.00, '2020-07-17', null, '2020-07-22', 7, 'Failed the course - bad grade', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (102, 6, '2020-10-25', 'false', 'implementing kwnoledge on new technologies', 800.00, 240.00, '2020-11-30', '', '', 2, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (200, 7, '2020-10-30', 'false', 'Starting to work with C# on applications', 150.00, 90.00,  '2020-11-20', null, '2020-11-23', 3, 'Waiting for presentation', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (103, 8, '2020-11-30', 'false', 'Implementation of new cloud, learning the basics', 500.00, 375.00, '', '', '', 1, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (103, 9, '2020-10-14', 'false', 'Work with AWS Cloud', 550.00, 550.00, '', '', '', 3, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (104, 10, '2020-11-30', 'false', 'Security for applications', 650.00, 650.00, '', '', '', 1, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (200, 11, '2020-01-28', 'false', 'Fix webpages or create new ones', 700.00, 630.00, '2020-03-20', null, '2020-03-30', 7, 'Failed', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (105, 12, '2020-11-28', 'false', 'Learn about the subject to implement', 800.00, 640.00, '', '', '', 6, 'Employee knew about the event late', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (100, 13, '2020-01-15', 'true', '', 650.00, 520.00, '', '', '2020-04-11', 5, 'Employee Cancelled Request', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (107, 14, '2020-04-28', 'false', 'Learn how to work with the applications', 800.00, 640.00, '2020-09-11', '2020-09-15', '2020-09-30', 4, '', null);
+
+insert into reimbursement (employee_id, event_id, date_submition, employee_cancel, justification, amount_requested, adjusted_amount,
+dephead_approval_date, dirsup_approval_date, benco_approval_date, reimbursement_status_id, notes, upload_file_id)
+values (106, 15, '2020-09-28', 'false', 'learning', 900.00, 720.00, '2020-11-28', '', '', 3, 'Waiting for grades', null);
+
+
+/*****************************
+*Delete Information on Tables*
+*****************************/
+
+delete from "event" where event_id = 1;
+
+delete from reimbursement where reimbursement_id = 1;
+
+delete from reimbursement_amount where reimbursement_amount_id = 1;
+
+
+****************************
+
+select r.employee_id, rs.status, r.amount_requested, et.event_type_percentage, r.amount_requested * et.event_type_percentage as adjusted_amount
+from reimbursement r
+join "event" e
+on r.event_id = e.event_id 
+join event_type et 
+on e.event_type_id = et.event_type_id 
+join reimbursement_status rs 
+on r.reimbursement_status_id = rs.reimbursement_status_id 
+order by r.employee_id asc; 

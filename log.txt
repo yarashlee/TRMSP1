@@ -1,0 +1,65 @@
+2020-12-07 23:08:27 INFO  root:40 -  result set org.postgresql.jdbc.PgResultSet@31dc1584
+2020-12-07 23:08:27 INFO  root:45 -  Employee dao authenticated 100
+2020-12-07 23:08:27 INFO  root:40 - Authenticated Employee
+2020-12-07 23:09:09 INFO  root:21 - Form Controller --> create form --> event 
+2020-12-07 23:09:09 INFO  root:80 - Form Service --> Create Event
+2020-12-07 23:09:09 INFO  root:55 - Dao creating event
+2020-12-07 23:09:16 INFO  root:48 - Form Controller --> create form --> reimbursement
+2020-12-07 23:09:16 INFO  root:86 - Form Service --> Read Event by Id
+2020-12-07 23:09:16 INFO  root:80 - Dao read event by id = 28
+2020-12-07 23:09:16 INFO  root:54 - Form Service --> Create Reimbursement
+2020-12-07 23:09:16 INFO  root:54 - Dao creating reimbursement
+2020-12-07 23:09:31 INFO  root:93 - Employee Controller --> read all employee
+2020-12-07 23:09:31 INFO  root:38 - Employee Service --> readAllEmployeesById
+2020-12-07 23:09:31 INFO  root:105 - Form Controller --> getAllReimbursementByEmployeeId 
+2020-12-07 23:09:31 INFO  root:124 - Form Service --> read Reimbursement by id
+2020-12-07 23:09:31 INFO  root:116 - Form Controller --> getAllEventByEmployeeId 
+2020-12-07 23:09:31 INFO  root:130 - Form Service --> read event by id
+2020-12-07 23:09:31 INFO  root:326 - Dao read all employees
+2020-12-07 23:09:31 INFO  root:130 - Dao read all event reimbursement
+2020-12-07 23:09:31 INFO  root:128 - Controller read all events by employee
+2020-12-07 23:09:34 INFO  root:234 - Form Controller --> updateReimEmployeeCancelation 
+2020-12-07 23:09:34 INFO  root:192 - Form Service --> updateReimbursementCancellation
+2020-12-07 23:09:34 INFO  root:430 - Dao updating reimbursement cancellation by reimbursementid = 1
+2020-12-07 23:09:34 INFO  root:105 - Form Controller --> getAllReimbursementByEmployeeId 
+2020-12-07 23:09:34 INFO  root:116 - Form Controller --> getAllEventByEmployeeId 
+2020-12-07 23:09:34 INFO  root:93 - Employee Controller --> read all employee
+2020-12-07 23:09:34 INFO  root:130 - Form Service --> read event by id
+2020-12-07 23:09:34 INFO  root:124 - Form Service --> read Reimbursement by id
+2020-12-07 23:09:34 INFO  root:38 - Employee Service --> readAllEmployeesById
+2020-12-07 23:09:34 INFO  root:326 - Dao read all employees
+2020-12-07 23:09:34 INFO  root:128 - Controller read all events by employee
+2020-12-07 23:09:34 INFO  root:130 - Dao read all event reimbursement
+2020-12-07 23:09:40 INFO  root:234 - Form Controller --> updateReimEmployeeCancelation 
+2020-12-07 23:09:40 INFO  root:192 - Form Service --> updateReimbursementCancellation
+2020-12-07 23:09:40 INFO  root:430 - Dao updating reimbursement cancellation by reimbursementid = 3
+2020-12-07 23:09:40 INFO  root:116 - Form Controller --> getAllEventByEmployeeId 
+2020-12-07 23:09:40 INFO  root:93 - Employee Controller --> read all employee
+2020-12-07 23:09:40 INFO  root:105 - Form Controller --> getAllReimbursementByEmployeeId 
+2020-12-07 23:09:40 INFO  root:38 - Employee Service --> readAllEmployeesById
+2020-12-07 23:09:40 INFO  root:130 - Form Service --> read event by id
+2020-12-07 23:09:40 INFO  root:124 - Form Service --> read Reimbursement by id
+2020-12-07 23:09:40 INFO  root:128 - Controller read all events by employee
+2020-12-07 23:09:40 INFO  root:326 - Dao read all employees
+2020-12-07 23:09:40 INFO  root:130 - Dao read all event reimbursement
+2020-12-07 23:09:45 INFO  root:93 - Employee Controller --> read all employee
+2020-12-07 23:09:45 INFO  root:116 - Form Controller --> getAllEventByEmployeeId 
+2020-12-07 23:09:45 INFO  root:105 - Form Controller --> getAllReimbursementByEmployeeId 
+2020-12-07 23:09:45 INFO  root:130 - Form Service --> read event by id
+2020-12-07 23:09:45 INFO  root:38 - Employee Service --> readAllEmployeesById
+2020-12-07 23:09:45 INFO  root:124 - Form Service --> read Reimbursement by id
+2020-12-07 23:09:45 INFO  root:326 - Dao read all employees
+2020-12-07 23:09:45 INFO  root:128 - Controller read all events by employee
+2020-12-07 23:09:45 INFO  root:130 - Dao read all event reimbursement
+2020-12-07 23:09:52 INFO  root:214 - Form Controller --> updateEventGradeEmployee 
+2020-12-07 23:09:52 INFO  root:168 - Form Service --> updateEventGradeEmployee
+2020-12-07 23:09:52 INFO  root:287 - Dao updateEventGradeEmployee by eventId = 2
+2020-12-07 23:09:52 INFO  root:105 - Form Controller --> getAllReimbursementByEmployeeId 
+2020-12-07 23:09:52 INFO  root:93 - Employee Controller --> read all employee
+2020-12-07 23:09:52 INFO  root:124 - Form Service --> read Reimbursement by id
+2020-12-07 23:09:52 INFO  root:38 - Employee Service --> readAllEmployeesById
+2020-12-07 23:09:52 INFO  root:116 - Form Controller --> getAllEventByEmployeeId 
+2020-12-07 23:09:52 INFO  root:130 - Form Service --> read event by id
+2020-12-07 23:09:52 INFO  root:326 - Dao read all employees
+2020-12-07 23:09:52 INFO  root:130 - Dao read all event reimbursement
+2020-12-07 23:09:52 INFO  root:128 - Controller read all events by employee
