@@ -7,7 +7,7 @@ public class Employee {
 	private int reportTo;
 	private String firstName;
 	private String middleName;
-	private String lastName;
+	private String lastName; 
 	private String dateBirth; 
 	private String phoneNumber;
 	private String email;
@@ -16,9 +16,6 @@ public class Employee {
 	private String state;
 	private String country; 
 	private String postalCode;
-	
-
-	
 	
 	public Employee(int employeeId, String title, int reportTo, String firstName, String middleName, String lastName,
 			String dateBirth, String phoneNumber, String email, String address, String city, String state,

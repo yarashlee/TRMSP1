@@ -39,6 +39,7 @@ public class FormController {
 		Event newlyCreated = formService.creatEvent(event);
 		
 		ctx.sessionAttribute("newEventId", newlyCreated.getEventId());
+		
 		ctx.redirect("http://localhost:9099/formReimbursement.html");
 
 	}

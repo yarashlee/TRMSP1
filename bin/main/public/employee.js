@@ -149,24 +149,25 @@ window.onload = function () {
                 table.appendChild(tableRow);
 
                 /***Update Grade****/
-                    let updateForm = document.createElement("form");
-                    updateForm.action = "updateAfterGradeEmployee.html"
-                    let input1 = document.createElement("input");
-                    let input2 = document.createElement("input");
 
-                    input1.type = "hidden";
-                    input1.name = "eventId"
-                    input1.value = element.eventId;
+                let updateForm = document.createElement("form");
+                updateForm.action = "updateAfterGradeEmployee.html"
+                let input1 = document.createElement("input");
+                let input2 = document.createElement("input");
 
-                    input2.type = "submit";
-                    input2.className = "btn btn-outline-primary";
-                    input2.value = "Update";
+                input1.type = "hidden";
+                input1.name = "eventId"
+                input1.value = element.eventId;
 
-                    updateForm.appendChild(input1);
-                    updateForm.appendChild(input2);
+                input2.type = "submit";
+                input2.className = "btn btn-outline-primary";
+                input2.value = "Update";
 
-                    update.appendChild(updateForm);
-                
+                updateForm.appendChild(input1);
+                updateForm.appendChild(input2);
+
+                update.appendChild(updateForm);
+
             });
         }
     }
