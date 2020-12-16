@@ -19,9 +19,13 @@ The Tuition Reimbursement System, TRMS, allows users to submit reimbursements fo
 ## Features
 
 List of features ready and TODOs for future development
-* Allows users to submit reimbursements for courses and training.
-* The submitted reimbursement must be approved by that employee's supervisor, The department Head, and a Benefits Coordinator in that order.
+* Allows users to submit reimbursements for different events (courses, certification courses, certification examns, many more)
+* The submitted reimbursement must be approved by that employee's director supervisor, The department Head, and a Benefits Coordinator in that order.
 * The user can then add a grade to the reimbursement for final approval.
+* Director supervisor can check reimbursement and leave a status. 
+* Department Head and Benifits Coordinator can place grades, also leave notes on the status of the reimbursement. 
+* Benefit Coordinator que change the rewarded amount on the reimbursement of the employee that submited.
+* Employees can cancel their reimbursement request. 
 
 To-do list:
 * Implement JWTs for better session tracking and authurization.
