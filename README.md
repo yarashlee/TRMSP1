@@ -38,7 +38,7 @@ To-do list:
 - Within the connectionUtil.java, set your URL, Username, and Password in order to connect to your database
 - Run the included SQL file in your database to setup tables and dummy data(replace dummy data as needed)
 - If running within the Spring Tool Suit 4, within ServerDriver.java, specify your prefered port.
-- Run the serverDriver.java and navigate to http://localhost:'port'/hello to test connectivity
+- Run the serverDriver.java and navigate to http://localhost:'port'/helloYara to test connectivity
 
 ## Usage
 
