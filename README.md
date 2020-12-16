@@ -29,9 +29,7 @@ To-do list:
 
 ## Getting Started
    
-- git clone https://github.com/chrisbreniser/Project-1-TRMS.git
-
-> Setup your code 
+- git clone https://github.com/yarashlee/TRMSP1.git
 
 - Within the connectionUtil.java, set your URL, Username, and Password in order to connect to your database
 - Run the included SQL file in your database to setup tables and dummy data(replace dummy data as needed)
